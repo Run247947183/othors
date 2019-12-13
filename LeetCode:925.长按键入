@@ -1,0 +1,22 @@
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        // 利用栈和哈希Map来解决
+        Stack<Integer> stack = new Stack<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        // 先遍历数组 nums2，找到里面每个元素右边第一个比它大的值
+        // 将每个元素和右边第一个比它大的值以键值对的形式存入 map
+        // 最后遍历数组 nums1，如果在 map 中存在该元素在 nums2中右边第一个比它大的值
+        // 那么就返回该大的值，否则直接返回 -1
+        for (int num : nums2) {
+            while (!stack.isEmpty() && stack.peek() < num) {
+                map.put(stack.pop(), num);
+            }
+            stack.push(num);
+        }
+        int[] res = new int[nums1.length];
+        for (int i = 0; i < nums1.length; i++) {
+            res[i] = map.getOrDefault(nums1[i], -1);
+        }
+        return res;
+    }
+}
