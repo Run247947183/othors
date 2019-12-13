@@ -1,0 +1,25 @@
+class Solution {
+    public boolean backspaceCompare(String S, String T) {
+        return getStack(S).equals(getStack(T));        
+    }
+    public String getStack(String S) {
+        // 用栈来解决退格问题
+        Stack<Character> stack = new Stack<>();
+        char[] array = S.toCharArray();
+        for (char x : array) {
+            if (x == '#') {
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                } 
+            } else {
+                stack.push(x);
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        // 栈不为空，就将栈顶元素加入可变字符串中
+        while (!stack.isEmpty()) {
+            sb.append(stack.pop());
+        }
+        return new String(sb);
+    }
+}
