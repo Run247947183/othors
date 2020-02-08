@@ -1,0 +1,38 @@
+class Solution {
+    public char nextGreatestLetter(char[] letters, char target) {
+        // target 比数组最后一个元素都大，又因为数组顺序是循环的
+        // 所以返回 数组的第一个元素
+        // target 比数组第一个元素都小，直接返回第一个元素
+        if (target > letters[letters.length - 1] || target < letters[0]) {
+                return letters[0];
+        }
+        int i = 0;    
+        for (; i < letters.length; i++) {
+            // 第一种情况：target 和 letters[i] 相等
+            if (target == letters[i]) {
+                // 找到和 target 不相等的元素
+                // 如果到数组的最后一个元素还没找到和 target 不相等的元素
+                // 此时都退出 while 循环
+                while (target == letters[i] && i != (letters.length - 1)) {
+                    i++;
+                }
+                // 再次判断，如果相等
+                // 说明最后一个元素也是和 target 相等，又因为数组顺序循环
+                // 则返回 letter[0]
+                if (target == letters[i]) {
+                    return letters[0];
+                } else {
+                    // 此时找到了和 target 不相等的元素
+                    return letters[i];
+                }
+            } else {
+                // 第二种情况：target 小于 letter[i]
+                // 此时满足题目条件的 char 就是 letter[i]
+                if (target < letters[i]) {
+                    break;
+                }
+            }
+        }
+        return letters[i]; 
+    }
+}
