@@ -1,30 +1,32 @@
 class Solution {
     public int[] kWeakestRows(int[][] mat, int k) {
-        int r=mat.length;
-        int c=mat[0].length;
-     
-        int cnt = 0;
-        int[] res = new int[k];
-        boolean[] flag = new boolean[r];
-        for(int i=0; i<c; i++){
-            for(int j=0; j<r; j++){
-                if(!flag[j] && mat[j][i]==0 && cnt<k){
-
-                    res[cnt] = j;
-                    flag[j]=true;
-                    cnt++;
+        int len = mat.length; // mat一维数组长度
+        int size = mat[0].length; // mat 二维数组的长度
+        boolean[] tag = new boolean[len]; // 用来旁段该一维数组是否统计过战斗力
+        int[] res = new int[k]; // 保存最终的结果
+        int x = 0; // 用来和 k 比较，判断是否结束循环
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < len; j++) {
+                // 注意：mat[j][i] 表示在同一个下标下，看哪个一维数组该位置为 0
+                // 满足第一个条件：x < k 还没统计完
+                // 第二个条件：满足该位置为平民也就是 0
+                // 第三个条件：该数组并没有结束战斗力的统计，也就是没有碰到过 0 
+                if (x < k && mat[j][i] == 0 && !tag[j]) {
+                    res[x] = j;
+                    tag[j] = true;
+                    x++;
                 }
             }
         }
-
-        int i=0;
-        while(cnt<k){
-            if(!flag[i]){
-                res[cnt] = i;
-                cnt++;
-                flag[i]=true;
+        // 可能出现整个一维数组都是 1 的情况，此时要重新遍历
+        int y = 0;
+        while (x < k) {
+            if (!tag[y]) {
+                res[x] = y;
+                x++;
+                tag[y] = true;
             }
-            i++;
+            y++;
         }
         return res;
     }
