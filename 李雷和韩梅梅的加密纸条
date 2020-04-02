@@ -1,0 +1,70 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Test3 {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        while (in.hasNextLine()) {
+            String date = in.nextLine();
+            String word = in.nextLine();
+            String res = helper(date, word);
+            System.out.println(res);
+        }
+    }
+    private static String helper(String date, String word) {
+        String[] res = null;
+        StringBuilder sb = new StringBuilder();
+        String[] str1 = date.split(" ");
+        int month = Integer.parseInt(str1[0]);
+        int day = Integer.parseInt(str1[1]);
+        month = (month - 1) % 3;
+        if (month == 1) {
+            res = new String[]{"JKLMNOPQR", "STUVWXYZ*", "ABCDEFGHI"};
+        } else if (month == 2) {
+            res = new String[]{"STUVWXYZ*", "ABCDEFGHI", "JKLMNOPQR"};
+        } else {
+            res = new String[]{"ABCDEFGHI", "JKLMNOPQR", "STUVWXYZ*"};
+        }
+        change(res, day);
+        Map<Character, Integer> map = table(res);
+        int pos = 0;
+        for (int i = 0; i < word.length(); i++) {
+            pos = map.get(word.charAt(i));
+            sb.append(pos + " ");
+        }
+        return sb.toString();
+    }
+
+    private static Map<Character, Integer> table(String[] str) {
+        Map<Character, Integer> map = new HashMap<>();
+        char[] chars = null;
+        String s = null;
+        for (int i = 1; i < 4; i++) {
+            s = str[i - 1];
+            chars = s.toCharArray();
+            for (int j = 0; j < chars.length; j++) {
+                if (chars[j] == '*') {
+                    map.put(' ', (i * 10 + j + 1));
+                    continue;
+                }
+                map.put(chars[j], (i * 10 + j + 1));
+            }
+        }
+        return map;
+    }
+    private static void change(String[] str, int day) {
+        int time = (day - 1) % 9;
+        int i = 0;
+        String s = null;
+        String tmp = null;
+        String tmp2 = null;
+        while (i < 3) {
+            s = str[i];
+            tmp = s.substring(0, time);
+            tmp2 = s.substring(time);
+            str[i] = tmp2 + tmp;
+            i++;
+        }
+    }
+}
