@@ -1,0 +1,26 @@
+public class Test3 {
+    static class MyThread extends Thread {
+        private static int i = 0;
+
+        public synchronized void helper1() {
+            i++;
+        }
+
+
+        @Override
+        public void run() {
+            for (int j = 0; j < 1000000; j++) {
+                helper1();
+            }
+        }
+    }
+    public static void main(String[] args) throws InterruptedException {
+        MyThread th1 = new MyThread();
+        MyThread th2 = new MyThread();
+        th1.start();
+        th2.start();
+        th1.join();
+        th2.join();
+        System.out.println(MyThread.i);
+    }
+}
