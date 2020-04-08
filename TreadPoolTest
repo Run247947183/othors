@@ -1,0 +1,29 @@
+package lesson1;
+
+import java.util.concurrent.*;
+
+public class ThreadPoolTest {
+    public static void main(String[] args) {
+        // 双向队列
+        ExecutorService excutor = new ThreadPoolExecutor(
+                3,// 创建核心线程数：类似于正式员工的数量
+                5,// 最大线程数：类似于正式员工的数量+临时员工的数量
+                60,// 和下面的参数结合起来，表示临时创建的线程如果没有任务时，最长的存活时间
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(),// 阻塞队列：保存任务的队列，类似于物流存放包裹的仓库
+                // 线程创建的工厂类：创建临时线程的要求，类似于找临时工的要求
+                new ThreadFactory() {
+                    public Thread newThread(Runnable r) {
+                        return null;
+                    }
+                },
+                new ThreadPoolExecutor.CallerRunsPolicy() // 如果线程数达到最大，拒绝新线程加入的策略
+                // 拒绝策略
+                // CallerRunsPolicy 谁让执行任务，就拒绝，让它去执行任务
+                // AbortPolicy 拒绝执行任务，抛出异常 RejectedExecutionException
+                // DiscardPolicy 丢弃时间最新的任务
+                // DiscardOldestPolicy 丢弃时间最久的任务
+        );
+
+    }
+}
