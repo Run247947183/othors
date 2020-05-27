@@ -1,0 +1,63 @@
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        x,y,time = len(grid),len(grid[0]),0
+        D,queue = [[-1,0],[0,-1],[0,1],[1,0]],[]  #四个方向的坐标和队列
+        for i in range(x):
+            for j in range(y):
+                if grid[i][j] == 2:
+                    queue.append((i,j,0))
+        while queue:  
+            i,j,time = queue.pop(0)
+            for d in D:
+                loc_i,loc_j = i+d[0],j+d[1]
+                if 0 <=loc_i<x and 0<=loc_j<y and grid[loc_i][loc_j]==1:
+                    grid[loc_i][loc_j] = 2
+                    queue.append((loc_i,loc_j,time+1))
+        for g in grid:  
+            if 1 in g:
+                return -1
+        return time
+lyl0724-2mata川
+3 个月前
+bfs模板题，有好几个corner case需要注意一下，讲道理这放在leetcode上应该是mid难度把。。
+
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int[] p1 = {1, -1, 0, 0}, p2 = {0, 0, 1, -1};
+        Deque<int[]> queue = new ArrayDeque<>();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 2) {
+                    queue.offer(new int[] {i, j});
+                }
+            }
+        }
+
+        int steps = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int[] temp = queue.poll();
+                for (int j = 0; j < p1.length; j++) {
+                    int x = temp[0] + p1[j], y = temp[1] + p2[j];
+                    if (x >= 0 && x < grid.length && y >= 0 && y < grid[0].length && grid[x][y] == 1) {
+                        grid[x][y] = 2;
+                        queue.offer(new int[] {x, y});
+                    }
+                }
+            }
+            if (!queue.isEmpty()) {
+                steps++;
+            }
+        }
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
+                    return -1;
+                }
+            }
+        }
+        return steps;
+    }
+}
