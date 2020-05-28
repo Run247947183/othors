@@ -1,0 +1,33 @@
+class Solution {
+    public int minMutation(String start, String end, String[] bank) {
+        Set<String> banks = new HashSet<>(Arrays.asList(bank));
+        if (!banks.contains(end)) return -1;
+        Set<String> visited = new HashSet<>();
+        Deque<String> deque = new ArrayDeque<>();
+        deque.offer(start);
+        visited.add(start);
+        int ans = 0;
+        while (!deque.isEmpty()) {
+            ans++;
+            int size = deque.size();
+            for (int i = 0; i < size; i++) {
+                String cur = deque.poll();
+                for (String bank_ : banks) {
+                    if (!visited.contains(bank_) && check(cur, bank_)) {
+                        if (bank_.equals(end)) return ans;
+                        visited.add(bank_);
+                        deque.offer(bank_);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    private boolean check(String s1, String s2) {
+        int diff = 0;
+        for (int i = 0; i < 8; i++) {
+            if (s1.charAt(i) != s2.charAt(i)) diff++;
+        }
+        return diff == 1;
+    }
+}
